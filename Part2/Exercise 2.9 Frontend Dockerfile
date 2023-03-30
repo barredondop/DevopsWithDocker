@@ -1,0 +1,20 @@
+FROM node:16.19.1-alpine3.16
+
+WORKDIR /usr/src/app
+
+RUN node -v && npm -v
+
+COPY . .
+
+EXPOSE 5300
+
+RUN npm update -g serve
+RUN npm install
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080 
+
+RUN npm run build
+
+CMD npx serve -s -l 5300 build
+
+
