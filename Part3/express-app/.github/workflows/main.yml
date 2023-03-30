@@ -1,0 +1,32 @@
+name: Release Express App
+
+on:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: express-app
+
+jobs:
+  publish-docker-hub:
+    name: Publish docker hub
+    runs-on: ubuntu
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        tags: muggs/express-app
