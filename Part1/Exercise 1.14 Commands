@@ -1,0 +1,2 @@
+docker run -it  -p 8080:8080 --name backend backend
+docker run -it -p 5300:5300 --name frontend frontend 
