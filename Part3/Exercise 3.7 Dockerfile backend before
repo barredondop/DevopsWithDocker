@@ -1,0 +1,18 @@
+FROM golang
+
+ENV REQUEST_ORIGIN=http://localhost:5300
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+EXPOSE 8080
+
+RUN go build && \
+     useradd -m backenduser && \
+     chown backenduser .
+
+USER backenduser
+
+CMD ./server
+

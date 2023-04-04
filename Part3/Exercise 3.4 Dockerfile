@@ -1,0 +1,7 @@
+FROM docker
+RUN apk update
+RUN apk add git bash
+WORKDIR /app
+COPY ./Exercise_3.3.sh .
+RUN chmod +x ./Exercise_3.3.sh
+ENTRYPOINT ["/bin/bash", "/app/Exercise_3.3.sh"]

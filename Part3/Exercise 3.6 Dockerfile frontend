@@ -1,0 +1,22 @@
+FROM node:16.19.1-alpine3.16
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+EXPOSE 5300
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080 
+
+RUN node -v && npm -v && \
+    npm update -g serve && \
+    npm install && \
+    npm run build && \
+    addgroup -S frontgroup && adduser -S frontenduser -G frontgroup && \
+    chown frontenduser . 
+
+USER frontenduser
+
+CMD npx serve -s -l 5300 build
+
+

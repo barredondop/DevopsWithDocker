@@ -1,0 +1,23 @@
+FROM golang:alpine3.16 as build-stage
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN apk update && apk add --no-cache git && go get -d -v && go build && adduser backenduser --disabled-password && \
+     chown backenduser .
+
+FROM scratch
+
+WORKDIR /usr/src/app
+
+COPY --from=build-stage /usr/src/app/server /usr/src/app/server
+
+EXPOSE 8080
+
+ENV REQUEST_ORIGIN=http://localhost:5300
+
+USER backenduser
+
+CMD ./server
+

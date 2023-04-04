@@ -1,0 +1,29 @@
+FROM node:gallium-bullseye-slim as build-stage
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN npm install && \
+    npm run build 
+
+
+FROM node:gallium-bullseye-slim as serve-stage
+
+WORKDIR /usr/src/app
+
+COPY --from=build-stage /usr/src/app/build /usr/src/app/build
+
+EXPOSE 5300
+
+ENV REACT_APP_BACKEND_URL=http://localhost:8080 
+
+RUN npm update -g serve && \
+    adduser --system --group frontenduser && \
+    chown frontenduser . 
+
+USER frontenduser
+
+CMD npx serve -s -l 5300 build
+
+

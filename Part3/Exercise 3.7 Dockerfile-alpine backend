@@ -1,0 +1,18 @@
+FROM golang:alpine3.16
+
+ENV REQUEST_ORIGIN=http://localhost:5300
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+EXPOSE 8080
+
+RUN go build && \
+     adduser backenduser --disabled-password && \
+     chown backenduser .
+
+USER backenduser
+
+CMD ./server
+
